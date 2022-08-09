@@ -1,0 +1,21 @@
+header {
+  box-shadow: 0 0 50px var(--grey-light);
+}
+
+.container {
+  max-width: 1440px;
+  height: 70px;
+  margin: 0 auto;
+  padding: 0 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statistics svg {
+  margin-right: 10px;
+}
+
+.statistics span {
+  color: var(--red);
+}
