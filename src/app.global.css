@@ -1,0 +1,106 @@
+@import-normalize;
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('fonts/San Francisco(SF UI) Display Thin'), local('fonts/San-Francisco(SF-UI)-Display-Thin'),
+    url('fonts/SFUIDisplay-Thin.woff2') format('woff2'),
+    url('fonts/SFUIDisplay-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('fonts/San Francisco(SF UI) Display Light'), local('fonts/San-Francisco(SF-UI)-Display-Light'),
+    url('fonts/SFUIDisplay-Light.woff2') format('woff2'),
+    url('fonts/SFUIDisplay-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('fonts/San Francisco(SF UI) Display Regular'), local('fonts/San-Francisco(SF-UI)-Display-Regular'),
+    url('fonts/SFUIDisplay-Regular.woff2') format('woff2'),
+    url('fonts/SFUIDisplay-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'San Francisco(SF UI)';
+  src: local('fonts/San Francisco(SF UI) Display Medium'), local('fonts/San-Francisco(SF-UI)-Display-Medium'),
+    url('fonts/SFUIDisplay-Medium.woff2') format('woff2'),
+    url('fonts/SFUIDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+:root {
+  --black: #333;
+  --red: #DC3E22;
+  --red-light: #EE735D;
+  --red-unsat: #EA8979;
+  --red-dark: #B7280F;
+  --green: #A8B64F;
+  --green-dark: #899441;
+  --grey: #c4c4c4;
+  --grey-dark: #999;
+  --grey-light: #F4F4F4;
+}
+
+html {
+  min-width: 350px;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  --webkit-font-smoothing: antialiased;
+  --mox-oxs-font-smoothing: grayscale;
+  color: var(--black);
+  font-size: 16px;
+  line-height: 1;
+  font-family: 'San Francisco(SF UI)', serif;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+  outline: none;
+}
+
+@media(min-width: 1240px) {
+  body {
+    padding-right: 20px;
+  }
+}
