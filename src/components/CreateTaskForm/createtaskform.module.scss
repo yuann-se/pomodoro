@@ -1,0 +1,29 @@
+@import '../../variables';
+
+.form {
+  display: grid;
+  grid-column: 1 / 5;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  row-gap: 25px;
+}
+
+input {
+  grid-column: 1 / 3;
+  height: 55px;
+  padding: 20px 15px;
+  background-color: $greyF4;
+
+  &::placeholder {
+    font-weight: 300;
+    color: $grey99;
+    opacity: 1;
+  }
+}
+
+button {
+  padding: 20px 50px;
+  font-weight: 500;
+  color: white;
+  background-color: $green;
+}

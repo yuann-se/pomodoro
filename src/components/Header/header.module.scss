@@ -1,5 +1,7 @@
+@import '../../variables';
+
 header {
-  box-shadow: 0 0 50px var(--grey-light);
+  box-shadow: 0 0 50px $greyF4;
 }
 
 .container {
@@ -12,10 +14,12 @@ header {
   align-items: center;
 }
 
-.statistics svg {
-  margin-right: 10px;
-}
+.statistics {
+  svg {
+    margin-right: 10px;
+  }
 
-.statistics span {
-  color: var(--red);
+  span {
+    color: $red;
+  }
 }

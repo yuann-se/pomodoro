@@ -36,35 +36,24 @@
   font-style: normal;
 }
 
-:root {
-  --black: #333;
-  --red: #DC3E22;
-  --red-light: #EE735D;
-  --red-unsat: #EA8979;
-  --red-dark: #B7280F;
-  --green: #A8B64F;
-  --green-dark: #899441;
-  --grey: #c4c4c4;
-  --grey-dark: #999;
-  --grey-light: #F4F4F4;
-}
-
 html {
   min-width: 350px;
 }
 
 body {
+  width: 100vw;
   padding: 0;
   margin: 0;
+  color: var(--black);
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1;
 }
 
 * {
   box-sizing: border-box;
   --webkit-font-smoothing: antialiased;
   --mox-oxs-font-smoothing: grayscale;
-  color: var(--black);
-  font-size: 16px;
-  line-height: 1;
   font-family: 'San Francisco(SF UI)', serif;
 }
 
@@ -95,12 +84,12 @@ button {
 button:focus,
 button:focus-visible,
 a:focus,
-a:focus-visible {
+a:focus-visible,
+input:focus,
+input:focus-visible {
   outline: none;
 }
 
-@media(min-width: 1240px) {
-  body {
-    padding-right: 20px;
-  }
+input {
+  border-color: transparent;
 }

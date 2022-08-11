@@ -1,0 +1,25 @@
+@import '../../variables';
+
+.wrapper {
+  grid-column: 6 / 13;
+  grid-row: 1;
+  background-color: $greyF4;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 55px;
+  padding: 0 40px;
+  background-color: $greyC4;
+
+  span {
+    font-weight: 700;
+    color: white;
+  }
+
+  span:nth-child(2) {
+    font-weight: 400;
+  }
+}

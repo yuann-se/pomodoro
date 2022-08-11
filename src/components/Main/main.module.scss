@@ -1,0 +1,16 @@
+@import '../../variables';
+@import '../../mixins';
+
+.container {
+  @include container;
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+
+.wrapper {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 30px;
+  row-gap: 25px;
+}
