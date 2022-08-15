@@ -1,20 +1,44 @@
-import { useEffect, useState } from 'react';
-import styles from './timer.module.scss';
+import { useEffect, useRef } from 'react';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import classnames from 'classnames';
-import { TimeoutMsg } from './TimeoutMsg';
+import styles from './timer.module.scss';
+import { TimerControls } from './TimerControls';
 import sound from '../../sounds/sound1.mp3'
+import { TimeoutMsg } from './TimeoutMsg';
+import { currentPomodorosState, currentTimerState, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
 
 const audio = new Audio(sound);
 audio.volume = .1;
 
+const workInterval: number = 10;
+const shortBreakInterval: number = 5;
+const longBreakInterval: number = 7;
+
 export function Timer() {
 
-  const [seconds, setSeconds] = useState<number>(10);
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [isWork, setIsWork] = useState<boolean | undefined>();
-  const [isStarted, setIsStarted] = useState<boolean>(false);
-  const [pomodoros, setPomodoros] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const timerRef = useRef<null | number>(null);
+  const clearTimer = () => {
+    window.clearTimeout(timerRef.current!)
+  }
+
+  const taskName = useRecoilValue(tasksState)[0];
+
+  const [pomodoros, setPomodoros] = useRecoilState(currentPomodorosState);
+  const [totalPomodoros, setTotalPomodoros] = useRecoilState(totalPomodorosState);
+  const [seconds, setSeconds] = useRecoilState(currentTimerState);
+  const [isTimerStarted, setIsTimerStarted] = useRecoilState(isTimerStartedState);
+  const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
+
+  const [totalTime, setTotalTime] = useRecoilState(totalTimeState);
+  const [timeOnPause, setTimeOnPause] = useRecoilState(timeOnPauseState);
+  const [isTaskStarted, setIsTaskStarted] = useRecoilState(isTaskStartedState);
+  const [isTaskDone, setIsTaskDone] = useRecoilState(isTaskDoneState);
+  const [isStopped, setIsStopped] = useRecoilState(isTimerStoppedState);
+  const [stopsCount, setStopsCount] = useRecoilState(stopsCountState);
+
+  const [isWork, setIsWork] = useRecoilState(isWorkState);
+  const [workSessionsCount, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(isModalOpenState);
 
   const displayTime = () => {
     const min = Math.floor(seconds / 60);
@@ -24,39 +48,65 @@ export function Timer() {
     return `${minStr}:${secStr}`
   }
 
-  function setTimer() {
-    const timer = setTimeout(() => {
-      setSeconds(seconds - 1);
-    }, 1000);
-    return timer;
-  }
-
   useEffect(() => {
     if (isRunning && seconds > 0) {
-      setTimer()
+      timerRef.current = window.setTimeout(() => {
+        setSeconds((prev) => prev - 1)
+      }, 1000)
     }
-    return () => clearTimeout(setTimer());
-  });
-
-  useEffect(() => {
     if (seconds === 0) {
-      audio.play();
       setIsRunning(false);
-      setIsStarted(false);
+      setIsTimerStarted(false);
       setIsModalOpen(true);
-      if (isWork) {
-        setSeconds(5);
-        setPomodoros(pomodoros + 1);
+      if (!isTaskDone) {
+        audio.play();
+        if (isWork) {
+          if (workSessionsCount > 2) {
+            setSeconds(longBreakInterval);
+            setWorkSessionsCount(0);
+          } else {
+            setSeconds(shortBreakInterval);
+            setWorkSessionsCount((prev) => prev + 1)
+          }
+          setPomodoros((prev) => prev + 1);
+        } else {
+          setSeconds(workInterval);
+        }
       } else {
-        setSeconds(10);
+        setSeconds(workInterval);
+        setPomodoros(1);
+        setIsWork(false);
       }
     }
-  }, [isRunning, seconds, isWork, pomodoros])
+    return () => clearTimer();
+  }, [isRunning, seconds, isWork, pomodoros, isTaskDone, workSessionsCount,
+    setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount])
+
+  // Считаем общее время
+  useEffect(() => {
+    if (isTaskStarted && !isTaskDone && !isStopped) {
+      setTimeout(() => {
+        setTotalTime((prev) => prev + 1)
+      }, 1000);
+    }
+  }, [isTaskStarted, isTaskDone, isStopped, setTotalTime, totalTime]);
+
+  // Считаем время на паузе
+  useEffect(() => {
+    if (!isRunning && !isStopped && isTaskStarted) {
+      setTimeout(() => {
+        setTimeOnPause((prev) => prev + 1)
+      }, 1000);
+    }
+  }, [setTimeOnPause, timeOnPause, isRunning, isStopped, isTaskStarted])
 
   const onStartClick = () => {
-    typeof isWork === 'undefined' ? setIsWork(true) : setIsWork(!isWork)
-    setIsStarted(true);
+    if (!isTaskStarted) setIsTaskStarted(true);
+    setIsWork(!isWork)
+    setIsTimerStarted(true);
     setIsRunning(true);
+    setIsStopped(false);
+    if (isTaskDone) setIsTaskDone(false);
   }
 
   const onResumeClick = () => {
@@ -65,59 +115,60 @@ export function Timer() {
 
   const onPauseClick = () => {
     setIsRunning(false);
-    clearTimeout(setTimer());
+  }
+
+  const onSkipClick = () => {
+    setSeconds(0);
+  }
+
+  const onDoneClick = () => {
+    setIsTaskDone(true);
+    setIsTaskStarted(false);
+    setTotalPomodoros((prev) => prev + pomodoros);
+    setSeconds(0);
+  }
+
+  const onStopClick = () => {
+    setIsRunning(false);
+    setIsTimerStarted(false);
+    setIsWork(false);
+    setSeconds(workInterval);
+    setStopsCount((prev) => prev + 1);
+    setIsStopped(true);
   }
 
   const classes = classnames(styles.wrapper, {
-    [styles.workTheme]: isWork && isStarted,
-    [styles.breakTheme]: !isWork && isStarted,
+    [styles.workTheme]: isWork && isTimerStarted,
+    [styles.breakTheme]: !isWork && isTimerStarted,
   });
 
   return (
     <div className={classes}>
       <div className={styles.header}>
-        <span>Сверстать сайт </span>
+        <span>{taskName}</span>
         <span>Помидор {pomodoros}</span>
       </div>
 
       <div className={styles.timerBody}>
         <div className={styles.counter}>{displayTime()}</div>
-        <div className={styles.taskName}>
-          <span>Задача 1 - </span>
-          <span>Сверстать сайт</span>
-        </div>
+        {taskName && (
+          <div className={styles.taskName}>
+            <span>Задача - </span>
+            <span>{taskName}</span>
+          </div>
+        )}
         <div>
-
-          {isRunning
-            ? isWork
-              ? <>
-                <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
-                <button className={styles.btnRight} onClick={() => { }}>Стоп</button>
-              </>
-              : <>
-                <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
-                <button className={styles.btnRight} onClick={() => { }}>Пропустить</button>
-              </>
-            : isStarted
-              ? isWork
-                ? <>
-                  <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
-                  <button className={styles.btnRight} onClick={() => { }}>Сделано</button>
-                </>
-                : <>
-                  <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
-                  <button className={styles.btnRight} onClick={() => { }}>Пропустить</button>
-                </>
-              : <>
-                <button className={styles.btnLeft} onClick={onStartClick}>Старт</button>
-                <button className={styles.btnRight} disabled onClick={() => { }}>Стоп</button>
-              </>
-          }
-
+          <TimerControls isRunning={isRunning} isStarted={isTimerStarted} isWork={isWork}
+            onDoneClick={onDoneClick} onPauseClick={onPauseClick} onResumeClick={onResumeClick}
+            onSkipClick={onSkipClick} onStartClick={onStartClick} onStopClick={onStopClick} />
         </div>
+        <div>Total time: {totalTime}</div>
+        <div>Time on pause: {timeOnPause}</div>
+        <div>Total pomodoros: {totalPomodoros}</div>
+        <div>Stops Count: {stopsCount}</div>
       </div>
       <TimeoutMsg
-        message={isWork ? <div>Пора отдохнуть! &#128077;</div> : <div>Пора за работу! &#128170;</div>}
+        message={isTaskDone ? <div>Вы справились! &#127775;</div> : isWork ? <div>Пора отдохнуть! &#128077;</div> : <div>Пора за работу! &#128170;</div>}
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

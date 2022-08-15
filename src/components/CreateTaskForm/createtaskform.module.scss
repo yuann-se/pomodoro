@@ -1,4 +1,27 @@
 @import '../../variables';
+@import '../../mixins';
+
+.task-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.task-enter-active {
+  opacity: 1;
+  transform: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.task-exit {
+  opacity: 1;
+  transform: none;
+}
+
+.task-exit-active {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity .2s ease, transform .2s ease;
+}
 
 .form {
   display: grid;
@@ -13,6 +36,7 @@ input {
   height: 55px;
   padding: 20px 15px;
   background-color: $greyF4;
+  font-size: 16px;
 
   &::placeholder {
     font-weight: 300;
@@ -21,9 +45,15 @@ input {
   }
 }
 
-button {
-  padding: 20px 50px;
-  font-weight: 500;
-  color: white;
-  background-color: $green;
+.addBtn {
+  @include basicBtn;
+}
+
+.tasksList {
+  grid-column: 1 / 5;
+}
+
+.totalTime {
+  grid-column: 1 / 5;
+  color: $grey99;
 }

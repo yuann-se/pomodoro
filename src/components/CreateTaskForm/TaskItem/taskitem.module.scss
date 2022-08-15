@@ -1,0 +1,29 @@
+@import '../../../variables';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  height: 55px;
+  border-bottom: 1px solid $greyC4;
+  border-top: 1px solid $greyC4;
+  margin-bottom: -1px;
+}
+
+.pomodoroCount {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  text-align: center;
+  font-weight: 300;
+  line-height: 23px;
+  border: 1px solid $greyC4;
+  border-radius: 50%;
+}
+
+.taskBody {
+  font-weight: 300;
+}
+
+.menuBtn {
+  margin-left: auto;
+}
