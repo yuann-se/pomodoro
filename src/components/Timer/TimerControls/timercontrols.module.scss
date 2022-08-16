@@ -4,7 +4,6 @@
 .btnLeft {
   @include basicBtn;
   margin-right: 25px;
-  transition: background-color .2s ease;
 
   &:not(:disabled):hover {
     background-color: $green-dark;
@@ -16,17 +15,16 @@
   color: $red;
   border: 1px solid $red;
   background-color: transparent;
-  transition: color .2s ease, background-color .2s ease;
 
   &:not(:disabled):hover {
     color: white;
     background-color: $red;
   }
-}
 
-button:disabled {
-  pointer-events: none;
-  color: $greyC4;
-  border: 1px solid $greyC4;
-  background-color: transparent;
+  &:disabled {
+    pointer-events: none;
+    color: $greyC4;
+    border: 1px solid $greyC4;
+    background-color: transparent;
+  }
 }

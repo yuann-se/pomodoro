@@ -11,4 +11,19 @@
   font-size: 16px;
   color: white;
   background-color: $green;
+  transition: color .2s ease, background-color .2s ease;
+
+  &:hover {
+    background-color: $green-dark;
+  }
+}
+
+@mixin makeLarger {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px -5px;
+  }
 }

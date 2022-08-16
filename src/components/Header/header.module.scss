@@ -1,4 +1,5 @@
 @import '../../variables';
+@import '../../mixins';
 
 header {
   box-shadow: 0 0 50px $greyF4;
@@ -15,11 +16,28 @@ header {
 }
 
 .statistics {
+  @include makeLarger;
+
   svg {
     margin-right: 10px;
+
+    path {
+      transition: fill .2s ease;
+    }
   }
 
   span {
     color: $red;
+    transition: color .2s ease;
+  }
+
+  &:hover {
+    path {
+      fill: $red-dark;
+    }
+
+    span {
+      color: $red-dark;
+    }
   }
 }

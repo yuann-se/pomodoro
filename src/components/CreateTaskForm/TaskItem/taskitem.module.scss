@@ -1,6 +1,31 @@
 @import '../../../variables';
+@import '../../../mixins';
+
+.menu-enter {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.menu-enter-active {
+  opacity: 1;
+  transform: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.menu-exit {
+  opacity: 1;
+  transform: none;
+}
+
+.menu-exit-active {
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
 
 .wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   height: 55px;
@@ -26,4 +51,49 @@
 
 .menuBtn {
   margin-left: auto;
+  @include makeLarger;
+}
+
+.editForm {
+  width: calc(100% - 60px);
+
+  input {
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    padding-right: 10px;
+    border: 0;
+
+    &::selection {
+      background-color: $greyF4;
+    }
+  }
+}
+
+.dropdownWrapper {
+  position: absolute;
+  z-index: 100;
+  top: 45px;
+  right: -67px;
+  width: 165px;
+
+  background-color: white;
+  border: 1px solid $greyC4;
+
+  li {
+    width: 100%;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    top: -5px;
+    left: 80px;
+    transform: rotate(45deg);
+    border-top: 1px solid $greyC4;
+    border-left: 1px solid $greyC4;
+    background-color: white;
+  }
 }

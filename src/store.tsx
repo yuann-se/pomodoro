@@ -3,9 +3,21 @@ import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-export const tasksState = atom<string[]>({
+export interface ITask {
+  poms: number;
+  text: string;
+  id: string;
+}
+
+export const tasksState = atom<ITask[]>({
   key: 'tasksList',
   default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const currentTaskState = atom<string>({
+  key: 'currentTask',
+  default: '',
   effects_UNSTABLE: [persistAtom],
 });
 
@@ -28,7 +40,7 @@ export const stopsCountState = atom<number>({
 });
 
 export const currentTimerState = atom<number>({
-  key: 'currentTimerState',
+  key: 'currentTimer',
   default: 10,
   effects_UNSTABLE: [persistAtom],
 });
@@ -70,7 +82,7 @@ export const isTaskDoneState = atom<boolean>({
 });
 
 export const isTimerStoppedState = atom<boolean>({
-  key: 'isTimerStoppedState',
+  key: 'isTimerStopped',
   default: false,
   effects_UNSTABLE: [persistAtom],
 });

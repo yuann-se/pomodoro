@@ -5,7 +5,7 @@ import styles from './timer.module.scss';
 import { TimerControls } from './TimerControls';
 import sound from '../../sounds/sound1.mp3'
 import { TimeoutMsg } from './TimeoutMsg';
-import { currentPomodorosState, currentTimerState, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
+import { currentPomodorosState, currentTaskState, currentTimerState, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
 
 const audio = new Audio(sound);
 audio.volume = .1;
@@ -21,7 +21,9 @@ export function Timer() {
     window.clearTimeout(timerRef.current!)
   }
 
-  const taskName = useRecoilValue(tasksState)[0];
+  const storeValue = useRecoilValue(tasksState);
+  const taskName = storeValue.length ? storeValue[0].text : '';
+  const [, setCurrentTask] = useRecoilState(currentTaskState);
 
   const [pomodoros, setPomodoros] = useRecoilState(currentPomodorosState);
   const [totalPomodoros, setTotalPomodoros] = useRecoilState(totalPomodorosState);
@@ -69,6 +71,7 @@ export function Timer() {
             setWorkSessionsCount((prev) => prev + 1)
           }
           setPomodoros((prev) => prev + 1);
+          setTotalPomodoros((prev) => prev + 1);
         } else {
           setSeconds(workInterval);
         }
@@ -79,8 +82,7 @@ export function Timer() {
       }
     }
     return () => clearTimer();
-  }, [isRunning, seconds, isWork, pomodoros, isTaskDone, workSessionsCount,
-    setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount])
+  }, [isRunning, seconds, isWork, pomodoros, isTaskDone, workSessionsCount, setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount, setTotalPomodoros])
 
   // Считаем общее время
   useEffect(() => {
@@ -102,6 +104,7 @@ export function Timer() {
 
   const onStartClick = () => {
     if (!isTaskStarted) setIsTaskStarted(true);
+    setCurrentTask(taskName);
     setIsWork(!isWork)
     setIsTimerStarted(true);
     setIsRunning(true);
@@ -122,10 +125,9 @@ export function Timer() {
   }
 
   const onDoneClick = () => {
+    setSeconds(0);
     setIsTaskDone(true);
     setIsTaskStarted(false);
-    setTotalPomodoros((prev) => prev + pomodoros);
-    setSeconds(0);
   }
 
   const onStopClick = () => {
@@ -158,9 +160,7 @@ export function Timer() {
           </div>
         )}
         <div>
-          <TimerControls isRunning={isRunning} isStarted={isTimerStarted} isWork={isWork}
-            onDoneClick={onDoneClick} onPauseClick={onPauseClick} onResumeClick={onResumeClick}
-            onSkipClick={onSkipClick} onStartClick={onStartClick} onStopClick={onStopClick} />
+          <TimerControls isRunning={isRunning} isStarted={isTimerStarted} isWork={isWork} onDoneClick={onDoneClick} onPauseClick={onPauseClick} onResumeClick={onResumeClick} onSkipClick={onSkipClick} onStartClick={onStartClick} onStopClick={onStopClick} />
         </div>
         <div>Total time: {totalTime}</div>
         <div>Time on pause: {timeOnPause}</div>
