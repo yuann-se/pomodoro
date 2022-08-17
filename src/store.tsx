@@ -21,21 +21,31 @@ export const currentTaskState = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const totalTimeState = atom<number>({
+interface ICount {
+  [period: string]: number
+}
+
+export const totalTimeState = atom<ICount>({
   key: 'totalTime',
-  default: 0,
+  default: {},
   effects_UNSTABLE: [persistAtom],
 });
 
-export const timeOnPauseState = atom<number>({
+export const timeOnPauseState = atom<ICount>({
   key: 'timeOnPause',
-  default: 0,
+  default: {},
   effects_UNSTABLE: [persistAtom],
 });
 
-export const stopsCountState = atom<number>({
+export const stopsCountState = atom<ICount>({
   key: 'stopsCount',
-  default: 0,
+  default: {},
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const totalPomodorosState = atom<ICount>({
+  key: 'totalPomodoros',
+  default: {},
   effects_UNSTABLE: [persistAtom],
 });
 
@@ -48,12 +58,6 @@ export const currentTimerState = atom<number>({
 export const currentPomodorosState = atom<number>({
   key: 'currentPomodoros',
   default: 1,
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const totalPomodorosState = atom<number>({
-  key: 'totalPomodoros',
-  default: 0,
   effects_UNSTABLE: [persistAtom],
 });
 
@@ -102,5 +106,11 @@ export const workSessionsCountState = atom<number>({
 export const isModalOpenState = atom<boolean>({
   key: 'isModalOpen',
   default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const selectedPeriod = atom<string>({
+  key: 'selectedPeriod',
+  default: 'Эта неделя',
   effects_UNSTABLE: [persistAtom],
 });

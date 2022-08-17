@@ -3,7 +3,8 @@ import { hot } from 'react-hot-loader/root'
 import { Header } from './components/Header';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Main } from './components/Main';
-import { RecoilRoot } from "recoil";
+import { RecoilRoot } from 'recoil';
+import { Statistics } from './components/Statistics';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path='statistics' />
+          <Route path='statistics' element={<Statistics />} />
           <Route path='/' element={<Main />} />
         </Routes>
       </BrowserRouter>

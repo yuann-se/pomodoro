@@ -2,6 +2,10 @@
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 80px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 30px;
+  row-gap: 25px;
 }
 
 @mixin basicBtn {

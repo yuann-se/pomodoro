@@ -1,0 +1,39 @@
+@import '../../variables';
+
+.wrapper {
+  grid-column: 1 / 4;
+  height: 180px;
+  background-color: $greyF4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.picture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 50px);
+
+  svg {
+    margin-right: 15px;
+  }
+
+  span {
+    font-size: 24px;
+    font-weight: 700;
+    color: $grey99;
+  }
+}
+
+.text {
+  height: 50px;
+  width: 100%;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 50px;
+  text-align: center;
+  background-color: $red;
+}

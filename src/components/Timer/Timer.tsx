@@ -10,6 +10,14 @@ import { currentPomodorosState, currentTaskState, currentTimerState, isModalOpen
 const audio = new Audio(sound);
 audio.volume = .1;
 
+export const getToday = () => {
+  const date = new Date();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const period = `${month}&${day}`;
+  return period
+}
+
 const workInterval: number = 10;
 const shortBreakInterval: number = 5;
 const longBreakInterval: number = 7;
@@ -71,7 +79,11 @@ export function Timer() {
             setWorkSessionsCount((prev) => prev + 1)
           }
           setPomodoros((prev) => prev + 1);
-          setTotalPomodoros((prev) => prev + 1);
+
+          const period = getToday();
+          Object.keys(totalPomodoros).includes(period)
+            ? setTotalPomodoros({ ...totalPomodoros, [period]: totalPomodoros[period] + 1 })
+            : setTotalPomodoros({ ...totalPomodoros, [period]: 1 })
         } else {
           setSeconds(workInterval);
         }
@@ -82,25 +94,31 @@ export function Timer() {
       }
     }
     return () => clearTimer();
-  }, [isRunning, seconds, isWork, pomodoros, isTaskDone, workSessionsCount, setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount, setTotalPomodoros])
+  }, [isRunning, seconds, isWork, pomodoros, isTaskDone, workSessionsCount, totalPomodoros, setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount, setTotalPomodoros])
 
   // Считаем общее время
   useEffect(() => {
-    if (isTaskStarted && !isTaskDone && !isStopped) {
+    if (isTaskStarted && !isTaskDone && !isStopped && isTimerStarted) {
+      const period = getToday();
       setTimeout(() => {
-        setTotalTime((prev) => prev + 1)
+        Object.keys(totalTime).includes(period)
+          ? setTotalTime({ ...totalTime, [period]: totalTime[period] + 1 })
+          : setTotalTime({ ...totalTime, [period]: 0 });
       }, 1000);
     }
-  }, [isTaskStarted, isTaskDone, isStopped, setTotalTime, totalTime]);
+  }, [isTaskStarted, isTaskDone, isStopped, setTotalTime, totalTime, isTimerStarted]);
 
   // Считаем время на паузе
   useEffect(() => {
-    if (!isRunning && !isStopped && isTaskStarted) {
+    if (!isRunning && !isStopped && isTaskStarted && isTimerStarted) {
+      const period = getToday();
       setTimeout(() => {
-        setTimeOnPause((prev) => prev + 1)
+        Object.keys(timeOnPause).includes(period)
+          ? setTimeOnPause({ ...timeOnPause, [period]: timeOnPause[period] + 1 })
+          : setTimeOnPause({ ...timeOnPause, [period]: 0 })
       }, 1000);
     }
-  }, [setTimeOnPause, timeOnPause, isRunning, isStopped, isTaskStarted])
+  }, [setTimeOnPause, timeOnPause, isRunning, isStopped, isTaskStarted, isTimerStarted])
 
   const onStartClick = () => {
     if (!isTaskStarted) setIsTaskStarted(true);
@@ -108,7 +126,7 @@ export function Timer() {
     setIsWork(!isWork)
     setIsTimerStarted(true);
     setIsRunning(true);
-    setIsStopped(false);
+    if (isStopped) setIsStopped(false);
     if (isTaskDone) setIsTaskDone(false);
   }
 
@@ -135,7 +153,11 @@ export function Timer() {
     setIsTimerStarted(false);
     setIsWork(false);
     setSeconds(workInterval);
-    setStopsCount((prev) => prev + 1);
+
+    const period = getToday();
+    Object.keys(stopsCount).includes(period)
+      ? setStopsCount({ ...stopsCount, [period]: stopsCount[period] + 1 })
+      : setStopsCount({ ...stopsCount, [period]: 1 })
     setIsStopped(true);
   }
 
@@ -162,13 +184,13 @@ export function Timer() {
         <div>
           <TimerControls isRunning={isRunning} isStarted={isTimerStarted} isWork={isWork} onDoneClick={onDoneClick} onPauseClick={onPauseClick} onResumeClick={onResumeClick} onSkipClick={onSkipClick} onStartClick={onStartClick} onStopClick={onStopClick} />
         </div>
-        <div>Total time: {totalTime}</div>
-        <div>Time on pause: {timeOnPause}</div>
-        <div>Total pomodoros: {totalPomodoros}</div>
-        <div>Stops Count: {stopsCount}</div>
+        <div>Total time: {JSON.stringify(totalTime)}</div>
+        <div>Time on pause: {JSON.stringify(timeOnPause)}</div>
+        <div>Total pomodoros: {JSON.stringify(totalPomodoros)}</div>
+        <div>Stops Count: {JSON.stringify(stopsCount)}</div>
       </div>
       <TimeoutMsg
-        message={isTaskDone ? <div>Вы справились! &#127775;</div> : isWork ? <div>Пора отдохнуть! &#128077;</div> : <div>Пора за работу! &#128170;</div>}
+        message={isTaskDone ? <>Вы справились! &#127775;</> : isWork ? <>Пора отдохнуть! &#128077;</> : <>Пора за работу! &#128170;</>}
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

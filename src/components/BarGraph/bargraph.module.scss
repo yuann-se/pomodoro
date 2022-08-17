@@ -1,0 +1,83 @@
+@import '../../variables';
+
+.container {
+  position: relative;
+  grid-column: 4 / 13;
+  grid-row: 2 / 4;
+  display: grid;
+  grid-template-columns: 20px repeat(8, 1fr);
+  grid-template-rows: repeat(5, 83px) 50px;
+  column-gap: 30px;
+  align-items: end;
+  padding-right: 20px;
+  background-color: $greyF4;
+}
+
+.xAxis {
+  grid-column: 1 / 10;
+  grid-row: 6;
+  bottom: 0;
+
+  display: grid;
+  grid-template-columns: 20px repeat(8, 1fr);
+  column-gap: 30px;
+
+  margin-top: auto;
+  height: 50px;
+  background-color: #ececec;
+  text-align: center;
+
+  .text {
+    line-height: 50px;
+    color: $grey99;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color .2s ease;
+
+    &.active {
+      color: $red;
+    }
+
+    &.noData {
+      pointer-events: none;
+    }
+  }
+}
+
+.column {
+  background-color: $red-unsat;
+  grid-row: 1 / 6;
+  height: 100%;
+  z-index: 100;
+  cursor: pointer;
+  transition: background-color .2s ease;
+
+  &.active {
+    background-color: $red;
+  }
+
+  &.noData {
+    height: 5px;
+    background-color: $greyC4;
+    pointer-events: none;
+  }
+}
+
+.row {
+  grid-column: 1/10;
+  display: flex;
+  align-items: center;
+
+  .bar {
+    flex-grow: 1;
+    height: 1px;
+    background-color: $black;
+    opacity: .2;
+  }
+
+  .timeline {
+    width: 60px;
+    margin-left: 30px;
+    font-size: 12px;
+  }
+}

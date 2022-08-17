@@ -1,0 +1,86 @@
+@import '../../../variables';
+
+.options-enter {
+  max-height: 0;
+}
+
+.options-enter-active {
+  max-height: 110px;
+  transition: max-height .2s ease;
+}
+
+.options-exit {
+  max-height: 110px;
+}
+
+.options-exit-active {
+  max-height: 0;
+  transition: max-height .2s ease;
+}
+
+.optionsWrapper {
+  position: absolute;
+  z-index: 200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0px 10px 63px rgba(0, 0, 0, 0.07));
+}
+
+.wrapper {
+  position: relative;
+}
+
+.option,
+.mainOption {
+  width: 370px;
+  height: 55px;
+  padding: 0 15px;
+  background-color: $greyF4;
+
+  text-align: start;
+  color: inherit;
+  font-size: inherit;
+  border-top: 1px solid $greyC4;
+
+  span {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scale(0);
+      height: 1px;
+      bottom: -2px;
+      background-color: $greyC4;
+      transition: transform .3s ease;
+    }
+  }
+
+  &:hover span::before {
+    transform: scale(1);
+    transform-origin: left;
+  }
+}
+
+.mainOption {
+  position: relative;
+  z-index: 300;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span::before {
+    background-color: transparent;
+  }
+
+  & svg {
+    transition: transform .2s ease;
+  }
+
+  &.isOpen svg {
+    transform: rotate(180deg);
+  }
+}

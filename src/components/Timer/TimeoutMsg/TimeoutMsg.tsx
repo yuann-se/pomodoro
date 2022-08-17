@@ -1,7 +1,6 @@
-import React, { ReactNode, useRef } from 'react';
-import { createPortal } from 'react-dom';
+import React, { ReactNode } from 'react';
 import styles from './timeoutmsg.module.scss';
-import { CSSTransition } from 'react-transition-group';
+import { Modal } from '../../Modal';
 
 interface ITimeoutMsgProps {
   message: ReactNode;
@@ -17,38 +16,16 @@ const transitionClasses = {
 }
 
 export function TimeoutMsg({ message, open, onClose }: ITimeoutMsgProps) {
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const node = document.getElementById('modal_root');
-  if (!node) return null;
-
-  const handleOverlayClick = (e: React.SyntheticEvent) => {
-    if (e.target instanceof Node && !modalRef.current?.contains(e.target)) {
-      e.stopPropagation();
-      onClose();
-    }
-  }
 
   const handleClick = (e: React.SyntheticEvent) => {
     e.stopPropagation();
     onClose();
   }
 
-  return createPortal((
-    <CSSTransition
-      in={open}
-      timeout={200}
-      classNames={transitionClasses}
-      mountOnEnter
-      unmountOnExit
-      nodeRef={modalRef}
-    >
-      <div className={styles.modalWrapper} onClick={handleOverlayClick}>
-        <div className={styles.modal} ref={modalRef}>
-          {message}
-          <button className={styles.closeBtn} onClick={handleClick}>Ок!</button>
-        </div>
-      </div>
-    </CSSTransition>
-  ), node);
+  return (
+    <Modal open={open} onClose={onClose} transitionClasses={transitionClasses} overlayStyle='blur' modalStyle={{ maxWidth: 500, padding: '80px 40px 40px', }}>
+      <div className={styles.message}>{message}</div>
+      <button className={styles.closeBtn} onClick={handleClick}>Ок!</button>
+    </Modal>
+  );
 }

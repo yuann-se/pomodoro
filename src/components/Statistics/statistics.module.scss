@@ -1,0 +1,20 @@
+@import '../../variables';
+@import '../../mixins';
+
+.container {
+  @include container;
+  padding-top: 90px;
+  padding-bottom: 100px;
+}
+
+.titleBlock {
+  grid-column: 1 / 13;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .sectionTitle {
+    font-weight: 700;
+    font-size: 24px;
+  }
+}
