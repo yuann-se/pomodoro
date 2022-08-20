@@ -25,3 +25,16 @@
     }
   }
 }
+
+@media (max-width: $bpL) {
+  .descr {
+    grid-column: 1 / 13;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: $bpXS) {
+  h2 {
+    font-size: 20px;
+  }
+}

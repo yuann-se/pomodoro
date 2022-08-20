@@ -1,7 +1,7 @@
 @import '../../variables';
 
 .wrapper {
-  height: 510px;
+  height: 505px;
   grid-column: 6 / 13;
   grid-row: 1 / 4;
   background-color: $greyF4;
@@ -51,6 +51,7 @@
   align-items: center;
   justify-content: center;
   height: 450px;
+  padding: 20px;
 }
 
 .counter {
@@ -68,5 +69,23 @@
 
   span:nth-child(2) {
     color: $black;
+  }
+}
+
+@media (max-width: $bpL) {
+  .wrapper {
+    height: unset;
+    grid-column: 1 / 13;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .timerBody {
+    height: 350px;
+  }
+
+  .counter {
+    font-size: 120px;
   }
 }

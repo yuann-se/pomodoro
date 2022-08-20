@@ -1,22 +1,58 @@
 import './global.scss';
+import styles from './app.module.scss';
 import { hot } from 'react-hot-loader/root'
 import { Header } from './components/Header';
-import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Main } from './components/Main';
-import { RecoilRoot } from 'recoil';
 import { Statistics } from './components/Statistics';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { Route, Switch, useLocation } from 'react-router';
+
+const transitionClassesMain = {
+  enter: styles['mainRoute-enter'],
+  enterActive: styles['mainRoute-enter-active'],
+  exit: styles['mainRoute-exit'],
+  exitActive: styles['mainRoute-exit-active']
+};
+
+const transitionClassesStatistics = {
+  enter: styles['statsRoute-enter'],
+  enterActive: styles['statsRoute-enter-active'],
+  exit: styles['statsRoute-exit'],
+  exitActive: styles['statsRoute-exit-active']
+};
 
 function App() {
+
+  const location = useLocation();
+
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path='statistics' element={<Statistics />} />
-          <Route path='/' element={<Main />} />
-        </Routes>
-      </BrowserRouter>
-    </RecoilRoot>
+    <>
+      <Header />
+
+      <TransitionGroup>
+        <CSSTransition
+          key={location.pathname}
+          timeout={500}
+          classNames={transitionClassesStatistics}
+        >
+          <Switch location={location}>
+            <Route exact path='/statistics' children={<Statistics />} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+
+      <TransitionGroup>
+        <CSSTransition
+          key={location.pathname}
+          timeout={500}
+          classNames={transitionClassesMain}
+        >
+          <Switch location={location}>
+            <Route exact path='/' children={<Main />} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+    </>
   );
 }
 

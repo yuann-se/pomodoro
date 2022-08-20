@@ -15,6 +15,23 @@ header {
   align-items: center;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  span {
+    font-size: 24px;
+    font-weight: 300;
+    color: $red;
+  }
+}
+
 .statistics {
   @include makeLarger;
 
@@ -38,6 +55,29 @@ header {
 
     span {
       color: $red-dark;
+    }
+  }
+}
+
+@media (max-width: $bpS) {
+  .container {
+    padding: 0 50px;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .logo {
+    svg {
+      width: 35px;
+      height: 35px;
+    }
+
+    span {
+      display: none;
     }
   }
 }

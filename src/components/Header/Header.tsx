@@ -1,15 +1,14 @@
-import React from 'react';
 import styles from './header.module.scss';
-import { Link } from "react-router-dom";
-import logo from '../../img/logo.jpg';
-import { StatsIcon } from '../../icons';
+import { PomodoroIcon, StatsIcon } from '../../icons';
+import { Link } from 'react-router-dom';
 
 export function Header() {
   return (
     <header>
       <div className={styles.container}>
-        <Link to='/'>
-          <img src={logo} alt="" />
+        <Link to='/' className={styles.logo}>
+          <PomodoroIcon />
+          <span>pomodoro_box</span>
         </Link>
 
         <Link to='statistics' className={styles.statistics}>

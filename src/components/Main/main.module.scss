@@ -1,8 +1,30 @@
 @import '../../variables';
 @import '../../mixins';
 
+.wrapper {
+  display: flex;
+  justify-content: center
+}
+
 .container {
   @include container;
-  padding-top: 100px;
-  padding-bottom: 50px;
+  padding: 100px 80px 110px;
+}
+
+@media (max-width: $bpL) {
+  .container {
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: $bpS) {
+  .container {
+    padding: 50px 50px 110px;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .container {
+    padding: 30px 20px 110px;
+  }
 }

@@ -8,6 +8,13 @@
   &:not(:disabled):hover {
     background-color: $green-dark;
   }
+
+  &:disabled {
+    pointer-events: none;
+    color: white;
+    border: 1px solid $greyC4;
+    background-color: $greyC4;
+  }
 }
 
 .btnRight {

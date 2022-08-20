@@ -1,10 +1,15 @@
 @import '../../variables';
 @import '../../mixins';
 
+.wrapper {
+  display: flex;
+  justify-content: center
+}
+
 .container {
   @include container;
   padding-top: 90px;
-  padding-bottom: 100px;
+  padding-bottom: 40px;
 }
 
 .titleBlock {
@@ -16,5 +21,34 @@
   .sectionTitle {
     font-weight: 700;
     font-size: 24px;
+  }
+}
+
+@media (max-width: $bpL) {
+  .container {
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: $bpM) {
+  .container {
+    padding: 50px 40px;
+    column-gap: 20px;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .container {
+    padding: 30px 15px;
+  }
+
+  .titleBlock {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .sectionTitle {
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
   }
 }

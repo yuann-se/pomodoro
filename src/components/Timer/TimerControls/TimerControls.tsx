@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './timercontrols.module.scss';
 
 interface ITimerControlsProps {
@@ -11,9 +10,11 @@ interface ITimerControlsProps {
   onSkipClick: () => void;
   onResumeClick: () => void;
   onDoneClick: () => void;
+  taskName: string;
 }
 
-export function TimerControls({ isRunning, isWork, isStarted, onDoneClick, onPauseClick, onResumeClick, onSkipClick, onStartClick, onStopClick }: ITimerControlsProps) {
+export function TimerControls({ isRunning, isWork, isStarted, onDoneClick, onPauseClick, onResumeClick, onSkipClick, onStartClick, onStopClick, taskName }: ITimerControlsProps) {
+
   return (
     <>
       {isRunning
@@ -37,7 +38,7 @@ export function TimerControls({ isRunning, isWork, isStarted, onDoneClick, onPau
               <button className={styles.btnRight} onClick={onSkipClick}>Пропустить</button>
             </>
           : <>
-            <button className={styles.btnLeft} onClick={onStartClick}>Старт</button>
+            <button className={styles.btnLeft} onClick={onStartClick} disabled={!taskName}>Старт</button>
             <button className={styles.btnRight} disabled onClick={onStopClick}>Стоп</button>
           </>
       }

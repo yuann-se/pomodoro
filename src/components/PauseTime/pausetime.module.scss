@@ -1,0 +1,21 @@
+@import '../../variables';
+@import '../../mixins';
+
+.wrapper {
+  @include statsWrapper(#DFDCFE);
+  grid-column: 5 / 9;
+}
+
+@media (max-width: $bpL) {
+  .wrapper {
+    grid-column: 1 / 7;
+    grid-row: 6;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .wrapper {
+    grid-column: 1 / 13;
+    grid-row: 7;
+  }
+}

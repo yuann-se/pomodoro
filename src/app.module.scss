@@ -1,0 +1,38 @@
+@import './variables';
+
+.mainRoute-enter {
+  transform: translateX(-100%);
+}
+
+.mainRoute-enter-active {
+  transform: none;
+  transition: transform .5s ease;
+}
+
+.mainRoute-exit {
+  transform: none;
+}
+
+.mainRoute-exit-active {
+  transform: translateX(-100%);
+  transition: transform .5s ease;
+}
+
+
+.statsRoute-enter {
+  transform: translateX(100%);
+}
+
+.statsRoute-enter-active {
+  transform: none;
+  transition: transform .5s ease;
+}
+
+.statsRoute-exit {
+  transform: none;
+}
+
+.statsRoute-exit-active {
+  transform: translateX(100%);
+  transition: transform .5s ease;
+}

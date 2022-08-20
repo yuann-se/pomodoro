@@ -48,7 +48,8 @@
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.11.0",
-    "react-router-dom": "^6.3.0",
+    "react-router": "^5.3.3",
+    "react-router-dom": "^5.3.3",
     "react-transition-group": "^4.4.5",
     "recoil": "^0.7.5",
     "recoil-persist": "^4.2.0",
@@ -148,6 +149,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "@types/react-transition-group": "^4.4.5",
     "react-hot-loader": "^4.13.0"
   }

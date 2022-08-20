@@ -1,0 +1,21 @@
+@import '../../variables';
+@import '../../mixins';
+
+.wrapper {
+  @include statsWrapper(#C5F1FF);
+  grid-column: 9 / 13;
+}
+
+@media (max-width: $bpL) {
+  .wrapper {
+    grid-column: 7 / 13;
+    grid-row: 6;
+  }
+}
+
+@media (max-width: $bpXS) {
+  .wrapper {
+    grid-column: 1 / 13;
+    grid-row: 8;
+  }
+}

@@ -1,5 +1,7 @@
 @mixin container {
+  position: absolute;
   max-width: 1440px;
+  width: 100vw;
   margin: 0 auto;
   padding: 0 80px;
   display: grid;
@@ -20,6 +22,12 @@
   &:hover {
     background-color: $green-dark;
   }
+
+  @media (max-width: $bpXS) {
+    height: 50px;
+    font-size: 14px;
+    padding: 0 45px;
+  }
 }
 
 @mixin makeLarger {
@@ -29,5 +37,81 @@
     content: '';
     position: absolute;
     inset: -10px -5px;
+  }
+}
+
+@mixin statsWrapper($bgColor) {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35px;
+  padding-right: 20px;
+  padding-left: 25px;
+  transition: background-color .2s ease;
+  background-color: $bgColor;
+
+  svg {
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 35px;
+  }
+
+  &>div {
+    position: relative;
+    z-index: 100;
+  }
+
+  path {
+    transition: stroke .2s ease;
+  }
+
+  .title {
+    position: relative;
+    font-size: 24px;
+    line-height: 2;
+    margin-bottom: 25px;
+    width: fit-content;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: 5px -10px;
+      border-radius: 20px;
+      background-color: $bgColor;
+      transition: background-color .2s ease;
+    }
+  }
+
+  .data {
+    position: relative;
+    font-size: 64px;
+    width: fit-content;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: 0 -10px;
+      border-radius: 20px;
+      background-color: $bgColor;
+      transition: background-color .2s ease;
+    }
+  }
+
+  &.noData {
+    background-color: $greyF4;
+
+    path {
+      stroke: $greyC4;
+    }
+
+    .title::before,
+    .data::before {
+      background-color: $greyF4;
+    }
   }
 }

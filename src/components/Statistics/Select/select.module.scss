@@ -84,3 +84,19 @@
     transform: rotate(180deg);
   }
 }
+
+@media (max-width: $bpS) {
+
+  .option,
+  .mainOption {
+    width: 200px;
+  }
+}
+
+@media (max-width: $bpXS) {
+
+  .option,
+  .mainOption {
+    width: 300px;
+  }
+}

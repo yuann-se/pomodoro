@@ -3,6 +3,16 @@ import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
+export interface IIntervals {
+  [intervalName: string]: number;
+}
+
+export const appIntervals = atom<IIntervals>({
+  key: 'appIntervals',
+  default: { 'work': 300, 'shortBreak': 5, 'longBreak': 7 },
+  effects_UNSTABLE: [persistAtom],
+});
+
 export interface ITask {
   poms: number;
   text: string;
@@ -21,7 +31,7 @@ export const currentTaskState = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
-interface ICount {
+export interface ICount {
   [period: string]: number
 }
 
@@ -112,5 +122,11 @@ export const isModalOpenState = atom<boolean>({
 export const selectedPeriod = atom<string>({
   key: 'selectedPeriod',
   default: 'Эта неделя',
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const selectedDayState = atom<number>({
+  key: 'selectedDay',
+  default: 0,
   effects_UNSTABLE: [persistAtom],
 });

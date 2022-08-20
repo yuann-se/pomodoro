@@ -97,3 +97,14 @@
     background-color: white;
   }
 }
+
+@media (max-width: $bpL) {
+  .dropdownWrapper {
+    right: 0;
+
+    &::before {
+      left: unset;
+      right: 7px;
+    }
+  }
+}

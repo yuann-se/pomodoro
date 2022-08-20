@@ -19,8 +19,8 @@ export function CreateTaskForm() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [tasks, setTasks] = useRecoilState<ITask[]>(tasksState);
-  const [isTaskDone,] = useRecoilState<boolean>(isTaskDoneState);
-  const currentTask = useRecoilValue(currentTaskState);
+  const isTaskDone = useRecoilValue<boolean>(isTaskDoneState);
+  const currentTask = useRecoilValue<string>(currentTaskState);
 
   useEffect(() => {
     if (isTaskDone) {
@@ -63,11 +63,10 @@ export function CreateTaskForm() {
         <TransitionGroup component={null}>
           {taskList}
         </TransitionGroup>
+        {!!tasks.length && (
+          <li className={styles.timeCounter}>{getTime()}</li>
+        )}
       </ul>
-
-      {!!tasks.length && (
-        <div className={styles.timeCounter}>{getTime()}</div>
-      )}
     </>
   );
 }

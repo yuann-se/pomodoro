@@ -1,17 +1,17 @@
 import classNames from 'classnames';
 import { useRecoilValue } from 'recoil';
 import { totalTimeState } from '../../store';
+import { getPeriod } from '../Statistics';
 import styles from './bargraph.module.scss';
 
 interface IBarGraphProps {
   selectedDay: number;
+  selectedWeek: string;
   setDay: (val: number) => void;
-  month: number;
-  monthDay: number;
   weekDay: number;
 }
 
-export function BarGraph({ selectedDay, setDay, month, monthDay, weekDay }: IBarGraphProps) {
+export function BarGraph({ selectedDay, setDay, weekDay, selectedWeek }: IBarGraphProps) {
 
   const totalTime = useRecoilValue(totalTimeState);
 
@@ -19,8 +19,8 @@ export function BarGraph({ selectedDay, setDay, month, monthDay, weekDay }: IBar
   const dayNames = namesArr.map((item, i) => {
     const ind = i + 1;
     const classes = classNames(styles.text, {
-      [styles.active]: selectedDay === ind || (selectedDay === 0 && ind === 7),
-      [styles.noData]: ind > weekDay
+      [styles.active]: selectedDay === ind,
+      [styles.noData]: ind > weekDay && selectedWeek === 'Эта неделя'
     });
     return <div
       onClick={() => setDay(ind)}
@@ -35,14 +35,13 @@ export function BarGraph({ selectedDay, setDay, month, monthDay, weekDay }: IBar
     let colHeight: number | undefined;
     const ind = i + 1;
     if (i > 0 && ind <= weekDay) {
-      colHeight = totalTime[`${month}&${monthDay - (weekDay - ind)}`];
+      colHeight = totalTime[getPeriod(ind, selectedWeek)];
     };
 
     const classes = classNames(styles.column, {
       [styles.active]: selectedDay === ind || (selectedDay === 0 && ind === 7),
-      [styles.noData]: ind > weekDay
+      [styles.noData]: ind > weekDay && selectedWeek === 'Эта неделя'
     });
-
 
     return <div
       onClick={() => setDay(ind)}
@@ -53,8 +52,8 @@ export function BarGraph({ selectedDay, setDay, month, monthDay, weekDay }: IBar
   });
 
   const displayTime = (i: number) => {
-    if (i > 59) return `${Math.floor(i / 60)} ч ${i - Math.floor(i / 60) * 60} мин`;
-    return `${i} мин`
+    if (i > 59) return `${Math.floor(i / 60)} ч ${i - Math.floor(i / 60) * 60} м`;
+    return `${i} м`
   }
 
   let rows = [];
@@ -66,12 +65,14 @@ export function BarGraph({ selectedDay, setDay, month, monthDay, weekDay }: IBar
   };
 
   return (
-    <div className={styles.container}>
-      {columns}
-      {rows}
-      <div className={styles.xAxis}>
-        <div></div>
-        {dayNames}
+    <div className={styles.scrollContainer}>
+      <div className={styles.container}>
+        {columns}
+        {rows}
+        <div className={styles.xAxis}>
+          <div></div>
+          {dayNames}
+        </div>
       </div>
     </div>
   );
