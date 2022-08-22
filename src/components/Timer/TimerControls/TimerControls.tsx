@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { appIntervals, currentTaskState, currentTimerState, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, workSessionsCountState } from '../../../store';
+import { appIntervals, currentTaskState, currentSeconds, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, workSessionsCountState } from '../../../store';
 import styles from './timercontrols.module.scss';
 
 interface ITimerControlsProps {
@@ -17,7 +17,7 @@ export function TimerControls({ taskName, period }: ITimerControlsProps) {
   const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
   const [isStopped, setIsStopped] = useRecoilState(isTimerStoppedState);
   const [isTaskDone, setIsTaskDone] = useRecoilState(isTaskDoneState);
-  const [, setSeconds] = useRecoilState(currentTimerState);
+  const [, setSeconds] = useRecoilState(currentSeconds);
   const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [stopsCount, setStopsCount] = useRecoilState(stopsCountState);
 

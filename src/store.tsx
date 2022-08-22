@@ -12,6 +12,12 @@ export const appIntervals = atom<IIntervals>({
   default: { 'work': 10, 'shortBreak': 5, 'longBreak': 7 },
   effects_UNSTABLE: [persistAtom],
 });
+// При изменении интервалов необходимо поменять дефолтное значение в currentSeconds
+export const currentSeconds = atom<number>({
+  key: 'currentSeconds',
+  default: 10,
+  effects_UNSTABLE: [persistAtom],
+});
 
 export interface ITask {
   poms: number;
@@ -56,12 +62,6 @@ export const stopsCountState = atom<ICount>({
 export const totalPomodorosState = atom<ICount>({
   key: 'totalPomodoros',
   default: {},
-  effects_UNSTABLE: [persistAtom],
-});
-
-export const currentTimerState = atom<number>({
-  key: 'currentTimer',
-  default: 10,
   effects_UNSTABLE: [persistAtom],
 });
 

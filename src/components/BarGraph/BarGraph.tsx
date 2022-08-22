@@ -48,7 +48,7 @@ export function BarGraph({ selectedDay, setDay, weekDay, selectedWeek }: IBarGra
     return <div
       onClick={() => setDay(ind)}
       className={classes}
-      style={{ gridColumn: `${i + 2}/${i + 3}`, height: colHeight && colHeight >= 120 ? Math.floor(colHeight / 60 * 3.6) : 5 }}
+      style={{ gridColumn: `${i + 2}/${i + 3}`, height: colHeight && colHeight >= 120 ? Math.floor(colHeight / 60 * 3.5) : 5 }}
       key={i}
     ></div>
   });

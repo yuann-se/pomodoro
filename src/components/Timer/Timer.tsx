@@ -7,7 +7,7 @@ import workTimeSound from '../../sounds/workTime.mp3';
 import breakTimeSound from '../../sounds/breakTime.mp3';
 import successSound from '../../sounds/success.mp3'
 import { TimeoutMsg } from './TimeoutMsg';
-import { appIntervals, currentPomodorosState, currentTimerState, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
+import { appIntervals, currentPomodorosState, currentSeconds, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
 import { ClockFace } from './ClockFace';
 
 const workTimeAudio = new Audio(workTimeSound); workTimeAudio.volume = .1;
@@ -34,7 +34,7 @@ export function Timer() {
 
   const [pomodoros, setPomodoros] = useRecoilState(currentPomodorosState);
   const [totalPomodoros, setTotalPomodoros] = useRecoilState(totalPomodorosState);
-  const [seconds, setSeconds] = useRecoilState(currentTimerState);
+  const [seconds, setSeconds] = useRecoilState(currentSeconds);
   const [isTimerStarted, setIsTimerStarted] = useRecoilState(isTimerStartedState);
   const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
 

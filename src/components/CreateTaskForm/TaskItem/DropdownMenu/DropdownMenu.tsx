@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DecreaseIcon, DeleteIcon, EditIcon, IncreaseIcon } from '../../../../icons';
-import { appIntervals, currentPomodorosState, currentTimerState, IIntervals, isTaskStartedState, isTimerRunningState, isTimerStartedState, isWorkState, ITask, tasksState, workSessionsCountState } from '../../../../store';
+import { appIntervals, currentPomodorosState, currentSeconds, IIntervals, isTaskStartedState, isTimerRunningState, isTimerStartedState, isWorkState, ITask, tasksState, workSessionsCountState } from '../../../../store';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import styles from './dropdownmenu.module.scss';
 
@@ -16,7 +16,7 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
   const workInterval: number = useRecoilValue<IIntervals>(appIntervals).work;
   const [tasks, setTasks] = useRecoilState<ITask[]>(tasksState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [, setSeconds] = useRecoilState(currentTimerState);
+  const [, setSeconds] = useRecoilState(currentSeconds);
   const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [, setIsTaskStarted] = useRecoilState(isTaskStartedState);
   const [, setIsWork] = useRecoilState(isWorkState);
