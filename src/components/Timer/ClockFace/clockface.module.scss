@@ -1,0 +1,15 @@
+@import '../../../variables';
+
+.counter {
+  margin-bottom: 10px;
+  font-size: 150px;
+  font-weight: 200;
+}
+
+.work {
+  color: $red
+}
+
+.break {
+  color: $green;
+}

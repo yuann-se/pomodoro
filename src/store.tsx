@@ -9,7 +9,7 @@ export interface IIntervals {
 
 export const appIntervals = atom<IIntervals>({
   key: 'appIntervals',
-  default: { 'work': 300, 'shortBreak': 5, 'longBreak': 7 },
+  default: { 'work': 10, 'shortBreak': 5, 'longBreak': 7 },
   effects_UNSTABLE: [persistAtom],
 });
 

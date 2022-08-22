@@ -13,7 +13,7 @@ export function Focus({ period }: IFocusProps) {
   const totalTime = useRecoilValue(totalTimeState)[period] || 0;
   const totalPomodoros = useRecoilValue(totalPomodorosState)[period];
   const workInterval = useRecoilValue<IIntervals>(appIntervals).work;
-  const focusIndex = Math.floor(totalPomodoros * workInterval / totalTime * 100) || 0;
+  const focusIndex = Math.round(totalPomodoros * workInterval / totalTime * 100) || 0;
 
   const classes = classNames(styles.wrapper, {
     [styles.noData]: !totalPomodoros

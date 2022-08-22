@@ -1,6 +1,6 @@
-import styles from './descr.module.scss';
+import styles from './appdescr.module.scss';
 
-export function Descr() {
+export function AppDescr() {
   return (
     <div className={styles.descr}>
       <h2 className={styles.listTitle}>

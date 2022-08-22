@@ -11,19 +11,11 @@
   .header {
     background-color: $red;
   }
-
-  .counter {
-    color: $red;
-  }
 }
 
 .breakTheme {
   .header {
     background-color: $green;
-  }
-
-  .counter {
-    color: $green;
   }
 }
 
@@ -52,12 +44,6 @@
   justify-content: center;
   height: 450px;
   padding: 20px;
-}
-
-.counter {
-  margin-bottom: 10px;
-  font-size: 150px;
-  font-weight: 200;
 }
 
 .taskName {

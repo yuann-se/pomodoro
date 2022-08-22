@@ -64,6 +64,10 @@
     background-color: $greyC4;
     pointer-events: none;
   }
+
+  &:hover:not(&.active) {
+    background-color: $red-light;
+  }
 }
 
 .row {

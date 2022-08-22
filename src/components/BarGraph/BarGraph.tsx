@@ -19,7 +19,7 @@ export function BarGraph({ selectedDay, setDay, weekDay, selectedWeek }: IBarGra
   const dayNames = namesArr.map((item, i) => {
     const ind = i + 1;
     const classes = classNames(styles.text, {
-      [styles.active]: selectedDay === ind,
+      [styles.active]: selectedWeek === 'Эта неделя' ? selectedDay === ind && ind <= weekDay : selectedDay === ind,
       [styles.noData]: ind > weekDay && selectedWeek === 'Эта неделя'
     });
     return <div
@@ -34,9 +34,11 @@ export function BarGraph({ selectedDay, setDay, weekDay, selectedWeek }: IBarGra
 
     let colHeight: number | undefined;
     const ind = i + 1;
-    if (i > 0 && ind <= weekDay) {
-      colHeight = totalTime[getPeriod(ind, selectedWeek)];
-    };
+    if (selectedWeek === 'Эта неделя') {
+      if (ind <= weekDay) {
+        colHeight = totalTime[getPeriod(ind, selectedWeek)];
+      }
+    } else colHeight = totalTime[getPeriod(ind, selectedWeek)];
 
     const classes = classNames(styles.column, {
       [styles.active]: selectedDay === ind || (selectedDay === 0 && ind === 7),

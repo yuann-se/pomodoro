@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { DecreaseIcon, DeleteIcon, EditIcon, IncreaseIcon } from '../../../../icons';
-import { ITask, tasksState } from '../../../../store';
+import { appIntervals, currentPomodorosState, currentTimerState, IIntervals, isTaskStartedState, isTimerRunningState, isTimerStartedState, isWorkState, ITask, tasksState, workSessionsCountState } from '../../../../store';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import styles from './dropdownmenu.module.scss';
 
@@ -13,8 +13,16 @@ interface IDropdownMenuProps {
 
 export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) {
 
+  const workInterval: number = useRecoilValue<IIntervals>(appIntervals).work;
   const [tasks, setTasks] = useRecoilState<ITask[]>(tasksState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [, setSeconds] = useRecoilState(currentTimerState);
+  const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
+  const [, setIsTaskStarted] = useRecoilState(isTaskStartedState);
+  const [, setIsWork] = useRecoilState(isWorkState);
+  const [, setPomodoros] = useRecoilState(currentPomodorosState);
+  const [, setIsTimerStarted] = useRecoilState(isTimerStartedState);
+  const [, setIsRunning] = useRecoilState(isTimerRunningState);
 
   const onIncreaseClick = () => {
     const updatedData = tasks.map((task) => {
@@ -35,6 +43,17 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
     })
     setTasks(updatedData);
   };
+
+  const onConfirmClick = () => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+    setIsTaskStarted(false);
+    setWorkSessionsCount(0);
+    setIsWork(false);
+    setSeconds(workInterval);
+    setPomodoros(1);
+    setIsRunning(false);
+    setIsTimerStarted(false);
+  }
 
   return (
     <ul className={styles.itemsList}>
@@ -62,7 +81,7 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
           <span>Удалить</span>
         </button>
       </li>
-      <ConfirmDeleteModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onDelete={() => setTasks(tasks.filter(task => task.id !== taskId))} />
+      <ConfirmDeleteModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onDelete={onConfirmClick} />
     </ul>
   );
 }

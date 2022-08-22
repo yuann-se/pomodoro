@@ -43,7 +43,7 @@ export function Statistics() {
       <div className={styles.container}>
         <div className={styles.titleBlock}>
           <h2 className={styles.sectionTitle}>Ваша активность</h2>
-          <Select />
+          <Select weekDay={weekDay} />
         </div>
         <TotalTime selectedDay={selectedDay} period={period} />
         <PomodorosCount period={period} />
