@@ -1,8 +1,10 @@
 import classNames from 'classnames';
+import { useRef, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { currentSeconds, isTimerRunningState } from '../../../store';
 import styles from './clockface.module.scss';
 
 interface IClockFaceProps {
-  seconds: number;
   workTheme: boolean;
   breakTheme: boolean;
 }
@@ -15,7 +17,22 @@ const displayTime = (time: number) => {
   return `${minStr}:${secStr}`
 }
 
-export function ClockFace({ seconds, workTheme, breakTheme }: IClockFaceProps) {
+export function ClockFace({ workTheme, breakTheme }: IClockFaceProps) {
+
+  const [seconds, setSeconds] = useRecoilState(currentSeconds);
+  const [isRunning,] = useRecoilState(isTimerRunningState);
+
+  const timerRef = useRef<null | number>(null);
+  useEffect(() => {
+    if (isRunning && seconds > 0) {
+      timerRef.current = window.setTimeout(() => {
+        setSeconds((prev) => prev - 1)
+      }, 1000)
+    }
+    return () => window.clearTimeout(timerRef.current!)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning, seconds]);
+
 
   const classes = classNames(styles.counter, {
     [styles.work]: workTheme,

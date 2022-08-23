@@ -1,13 +1,16 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { appIntervals, currentTaskState, currentSeconds, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, workSessionsCountState } from '../../../store';
+import { appIntervals, currentTaskState, currentSeconds, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, workSessionsCountState, tasksState, currentPomodorosState } from '../../../store';
 import styles from './timercontrols.module.scss';
 
 interface ITimerControlsProps {
   period: string;
-  taskName: string;
 }
 
-export function TimerControls({ taskName, period }: ITimerControlsProps) {
+export function TimerControls({ period }: ITimerControlsProps) {
+
+  const storeValue = useRecoilValue(tasksState);
+  const taskName = storeValue.length ? storeValue[0].text : '';
+  const taskPoms = storeValue.length ? storeValue[0].poms : 0;
 
   const workInterval: number = useRecoilValue<IIntervals>(appIntervals).work;
   const [isTaskStarted, setIsTaskStarted] = useRecoilState(isTaskStartedState);
@@ -20,6 +23,7 @@ export function TimerControls({ taskName, period }: ITimerControlsProps) {
   const [, setSeconds] = useRecoilState(currentSeconds);
   const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [stopsCount, setStopsCount] = useRecoilState(stopsCountState);
+  const [pomodoros,] = useRecoilState(currentPomodorosState);
 
   const onStartClick = () => {
     if (!isTaskStarted) setIsTaskStarted(true);
@@ -57,32 +61,37 @@ export function TimerControls({ taskName, period }: ITimerControlsProps) {
   }
 
   return (
-    <>
-      {isRunning
-        ? isWork
-          ? <>
-            <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
-            <button className={styles.btnRight} onClick={onStopClick}>Стоп</button>
-          </>
-          : <>
-            <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
-            <button className={styles.btnRight} onClick={onSkipClick}>Пропустить</button>
-          </>
-        : isTimerStarted
+    <div className={styles.wrapper}>
+      <div>
+        {isRunning
           ? isWork
             ? <>
-              <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
-              <button className={styles.btnRight} onClick={onDoneClick}>Сделано</button>
+              <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
+              <button className={styles.btnRight} onClick={onStopClick}>Стоп</button>
             </>
             : <>
-              <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
+              <button className={styles.btnLeft} onClick={onPauseClick}>Пауза</button>
               <button className={styles.btnRight} onClick={onSkipClick}>Пропустить</button>
             </>
-          : <>
-            <button className={styles.btnLeft} onClick={onStartClick} disabled={!taskName}>Старт</button>
-            <button className={styles.btnRight} disabled onClick={onStopClick}>Стоп</button>
-          </>
-      }
-    </>
+          : isTimerStarted
+            ? isWork
+              ? <>
+                <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
+                <button className={styles.btnRight} onClick={onDoneClick}>Сделано</button>
+              </>
+              : <>
+                <button className={styles.btnLeft} onClick={onResumeClick}>Продолжить</button>
+                <button className={styles.btnRight} onClick={onSkipClick}>Пропустить</button>
+              </>
+            : <>
+              <button className={styles.btnLeft} onClick={onStartClick} disabled={!taskName || taskPoms < pomodoros}>Старт</button>
+              <button className={styles.btnRight} disabled onClick={onStopClick}>Стоп</button>
+            </>
+        }
+      </div>
+      {taskPoms < pomodoros && !isWork && isTaskStarted && (
+        <div className={styles.noPomodoros}>Упс! Время вышло. Добавьте еще помидорку к задаче &#127813;</div>
+      )}
+    </div>
   );
 }

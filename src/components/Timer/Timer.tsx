@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import classnames from 'classnames';
 import styles from './timer.module.scss';
@@ -7,7 +7,7 @@ import workTimeSound from '../../sounds/workTime.mp3';
 import breakTimeSound from '../../sounds/breakTime.mp3';
 import successSound from '../../sounds/success.mp3'
 import { TimeoutMsg } from './TimeoutMsg';
-import { appIntervals, currentPomodorosState, currentSeconds, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
+import { appIntervals, currentPomodorosState, currentSeconds, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
 import { ClockFace } from './ClockFace';
 
 const workTimeAudio = new Audio(workTimeSound); workTimeAudio.volume = .1;
@@ -43,21 +43,10 @@ export function Timer() {
   const [isTaskStarted,] = useRecoilState(isTaskStartedState);
   const [isTaskDone,] = useRecoilState(isTaskDoneState);
   const [isStopped,] = useRecoilState(isTimerStoppedState);
-  const [stopsCount,] = useRecoilState(stopsCountState);
 
   const [isWork, setIsWork] = useRecoilState(isWorkState);
   const [workSessionsCount, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [isModalOpen, setIsModalOpen] = useRecoilState(isModalOpenState);
-
-  const timerRef = useRef<null | number>(null);
-  useEffect(() => {
-    if (isRunning && seconds > 0) {
-      timerRef.current = window.setTimeout(() => {
-        setSeconds((prev) => prev - 1)
-      }, 1000)
-    }
-    return () => window.clearTimeout(timerRef.current!)
-  }, [isRunning, seconds, setSeconds]);
 
   useEffect(() => {
     if (seconds === 0) {
@@ -74,13 +63,13 @@ export function Timer() {
             setSeconds(shortBreakInterval);
             setWorkSessionsCount((prev) => prev + 1)
           }
-          setPomodoros((prev) => prev + 1);
 
           Object.keys(totalPomodoros).includes(period)
             ? setTotalPomodoros({ ...totalPomodoros, [period]: totalPomodoros[period] + 1 })
             : setTotalPomodoros({ ...totalPomodoros, [period]: 1 })
         } else {
           setSeconds(workInterval);
+          setPomodoros((prev) => prev + 1);
         }
       } else {
         setSeconds(workInterval);
@@ -91,7 +80,8 @@ export function Timer() {
           : setTotalPomodoros({ ...totalPomodoros, [period]: 1 })
       }
     }
-  }, [seconds, isWork, isTaskDone, workSessionsCount, totalPomodoros, setPomodoros, setSeconds, setIsRunning, setIsTimerStarted, setIsModalOpen, setIsWork, setWorkSessionsCount, setTotalPomodoros, workInterval, shortBreakInterval, longBreakInterval])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds, isWork, isTaskDone, workSessionsCount, totalPomodoros, workInterval, shortBreakInterval, longBreakInterval])
 
   // Считаем общее время
   useEffect(() => {
@@ -102,7 +92,8 @@ export function Timer() {
           : setTotalTime({ ...totalTime, [period]: 0 });
       }, 1000);
     }
-  }, [isTaskStarted, isTaskDone, isStopped, setTotalTime, totalTime, isTimerStarted]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTaskStarted, isTaskDone, isStopped, totalTime, isTimerStarted]);
 
   // Считаем время на паузе
   useEffect(() => {
@@ -113,7 +104,8 @@ export function Timer() {
           : setTimeOnPause({ ...timeOnPause, [period]: 0 })
       }, 1000);
     }
-  }, [setTimeOnPause, timeOnPause, isRunning, isStopped, isTaskStarted, isTimerStarted])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeOnPause, isRunning, isStopped, isTaskStarted, isTimerStarted])
 
   const classes = classnames(styles.wrapper, {
     [styles.workTheme]: isWork && isTimerStarted,
@@ -130,7 +122,7 @@ export function Timer() {
       </div>
 
       <div className={styles.timerBody}>
-        <ClockFace seconds={seconds} workTheme={isWork && isTimerStarted} breakTheme={!isWork && isTimerStarted} />
+        <ClockFace workTheme={isWork && isTimerStarted} breakTheme={!isWork && isTimerStarted} />
         {taskName && (
           <div className={styles.taskName}>
             <span>Задача - </span>
@@ -138,12 +130,9 @@ export function Timer() {
           </div>
         )}
         <div>
-          <TimerControls taskName={taskName} period={period} />
+          <TimerControls period={period} />
         </div>
-        <div>Total time: {JSON.stringify(totalTime)}</div>
-        <div>Time on pause: {JSON.stringify(timeOnPause)}</div>
-        <div>Total pomodoros: {JSON.stringify(totalPomodoros)}</div>
-        <div>Stops Count: {JSON.stringify(stopsCount)}</div>
+
       </div>
       <TimeoutMsg
         message={isTaskDone ? <>Вы справились! &#127775;</> : isWork ? <>Пора отдохнуть! &#128077;</> : <>Пора за работу! &#128170;</>}

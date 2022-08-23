@@ -20,7 +20,7 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
   const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [, setIsTaskStarted] = useRecoilState(isTaskStartedState);
   const [, setIsWork] = useRecoilState(isWorkState);
-  const [, setPomodoros] = useRecoilState(currentPomodorosState);
+  const [pomodoros, setPomodoros] = useRecoilState(currentPomodorosState);
   const [, setIsTimerStarted] = useRecoilState(isTimerStartedState);
   const [, setIsRunning] = useRecoilState(isTimerRunningState);
 
@@ -64,7 +64,7 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
         </button>
       </li>
       <li>
-        <button className={styles.btn} disabled={poms === 1} onClick={onDecreaseClick}>
+        <button className={styles.btn} disabled={poms === 1 || poms <= pomodoros} onClick={onDecreaseClick}>
           <DecreaseIcon />
           <span>Уменьшить</span>
         </button>

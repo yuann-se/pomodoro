@@ -26,7 +26,8 @@ export function CreateTaskForm() {
     if (isTaskDone) {
       setTasks((prev) => prev.filter((item) => item.text !== currentTask));
     }
-  }, [isTaskDone, setTasks, currentTask]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTaskDone, currentTask]);
 
   const handleClick = (e: SyntheticEvent) => {
     e.preventDefault();

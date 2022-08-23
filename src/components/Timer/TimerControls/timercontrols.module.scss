@@ -1,6 +1,12 @@
 @import '../../../variables';
 @import '../../../mixins';
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .btnLeft {
   @include basicBtn;
   margin-right: 25px;
@@ -34,4 +40,8 @@
     border: 1px solid $greyC4;
     background-color: transparent;
   }
+}
+
+.noPomodoros {
+  margin-top: 15px;
 }

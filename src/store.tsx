@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import { longBreakInterval, shortBreakInterval, workInterval } from "./settings";
 
 const { persistAtom } = recoilPersist();
 
@@ -9,13 +10,13 @@ export interface IIntervals {
 
 export const appIntervals = atom<IIntervals>({
   key: 'appIntervals',
-  default: { 'work': 10, 'shortBreak': 5, 'longBreak': 7 },
+  default: { 'work': workInterval, 'shortBreak': shortBreakInterval, 'longBreak': longBreakInterval },
   effects_UNSTABLE: [persistAtom],
 });
 // При изменении интервалов необходимо поменять дефолтное значение в currentSeconds
 export const currentSeconds = atom<number>({
   key: 'currentSeconds',
-  default: 10,
+  default: workInterval,
   effects_UNSTABLE: [persistAtom],
 });
 
@@ -125,8 +126,14 @@ export const selectedPeriod = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
+const getToday = () => {
+  let today = new Date().getDay();
+  if (today === 0) today = 7;
+  return today;
+}
+
 export const selectedDayState = atom<number>({
   key: 'selectedDay',
-  default: 0,
+  default: getToday(),
   effects_UNSTABLE: [persistAtom],
 });

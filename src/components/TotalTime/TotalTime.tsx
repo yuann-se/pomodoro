@@ -26,7 +26,7 @@ export function TotalTime({ selectedDay, period }: ITotalTimeProps) {
   const displayTime = () => {
     if (totalTime < 60) return <p className={styles.descr}>Нет данных</p>;
     const hours = Math.floor(totalTime / 60 / 60);
-    const minutes = Math.floor(totalTime / 60);
+    const minutes = Math.floor(totalTime / 60 - hours * 60);
     if (hours < 1) return <p className={styles.descr}>Вы работали над задачами в течение <span>{minutes}&nbsp;мин</span></p>
     return <p className={styles.descr}>Вы работали над задачами в течение <span>{hours}&nbsp;ч&nbsp;{minutes}&nbsp;мин</span></p>
   }
