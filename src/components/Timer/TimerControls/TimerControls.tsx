@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { appIntervals, currentTaskState, currentSeconds, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, workSessionsCountState, tasksState, currentPomodorosState } from '../../../store';
+import { appIntervals, currentTaskState, currentSeconds, IIntervals, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, stopsCountState, tasksState, currentPomodorosState, ITask } from '../../../store';
 import styles from './timercontrols.module.scss';
 
 interface ITimerControlsProps {
@@ -15,20 +15,19 @@ export function TimerControls({ period }: ITimerControlsProps) {
   const workInterval: number = useRecoilValue<IIntervals>(appIntervals).work;
   const [isTaskStarted, setIsTaskStarted] = useRecoilState(isTaskStartedState);
   const [isWork, setIsWork] = useRecoilState(isWorkState);
-  const [, setCurrentTask] = useRecoilState<string>(currentTaskState);
+  const [, setCurrentTask] = useRecoilState<ITask>(currentTaskState);
   const [isTimerStarted, setIsTimerStarted] = useRecoilState(isTimerStartedState);
   const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
   const [isStopped, setIsStopped] = useRecoilState(isTimerStoppedState);
   const [isTaskDone, setIsTaskDone] = useRecoilState(isTaskDoneState);
   const [, setSeconds] = useRecoilState(currentSeconds);
-  const [, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
   const [stopsCount, setStopsCount] = useRecoilState(stopsCountState);
   const [pomodoros,] = useRecoilState(currentPomodorosState);
 
   const onStartClick = () => {
     if (!isTaskStarted) setIsTaskStarted(true);
     setIsWork(prev => !prev)
-    setCurrentTask(taskName);
+    setCurrentTask(storeValue[0]);
     setIsTimerStarted(true);
     setIsRunning(true);
     if (isStopped) setIsStopped(false);
@@ -44,8 +43,6 @@ export function TimerControls({ period }: ITimerControlsProps) {
   const onDoneClick = () => {
     setSeconds(0);
     setIsTaskDone(true);
-    setIsTaskStarted(false);
-    setWorkSessionsCount(0);
   }
 
   const onStopClick = () => {
@@ -90,7 +87,7 @@ export function TimerControls({ period }: ITimerControlsProps) {
         }
       </div>
       {taskPoms < pomodoros && !isWork && isTaskStarted && (
-        <div className={styles.noPomodoros}>Упс! Время вышло. Добавьте еще помидорку к задаче &#127813;</div>
+        <div className={styles.noPomodoros}>Упс! Время вышло. Добавьте еще помидорку&nbsp;&#127813; или&nbsp;завершите&nbsp;задачу</div>
       )}
     </div>
   );

@@ -32,9 +32,15 @@ export const tasksState = atom<ITask[]>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const currentTaskState = atom<string>({
+export const completedTasksState = atom<ITask[]>({
+  key: 'completedTasksList',
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const currentTaskState = atom<ITask>({
   key: 'currentTask',
-  default: '',
+  default: { text: '', id: '', poms: 0 },
   effects_UNSTABLE: [persistAtom],
 });
 

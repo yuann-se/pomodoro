@@ -7,7 +7,7 @@ import workTimeSound from '../../sounds/workTime.mp3';
 import breakTimeSound from '../../sounds/breakTime.mp3';
 import successSound from '../../sounds/success.mp3'
 import { TimeoutMsg } from './TimeoutMsg';
-import { appIntervals, currentPomodorosState, currentSeconds, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
+import { appIntervals, completedTasksState, currentPomodorosState, currentSeconds, currentTaskState, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, ITask, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
 import { ClockFace } from './ClockFace';
 
 const workTimeAudio = new Audio(workTimeSound); workTimeAudio.volume = .1;
@@ -32,6 +32,10 @@ export function Timer() {
   const storeValue = useRecoilValue(tasksState);
   const taskName = storeValue.length ? storeValue[0].text : '';
 
+  const [tasks, setTasks] = useRecoilState<ITask[]>(tasksState);
+  const [completedTasks, setCompletedTasks] = useRecoilState<ITask[]>(completedTasksState);
+  const [currentTask,] = useRecoilState<ITask>(currentTaskState);
+
   const [pomodoros, setPomodoros] = useRecoilState(currentPomodorosState);
   const [totalPomodoros, setTotalPomodoros] = useRecoilState(totalPomodorosState);
   const [seconds, setSeconds] = useRecoilState(currentSeconds);
@@ -40,7 +44,7 @@ export function Timer() {
 
   const [totalTime, setTotalTime] = useRecoilState(totalTimeState);
   const [timeOnPause, setTimeOnPause] = useRecoilState(timeOnPauseState);
-  const [isTaskStarted,] = useRecoilState(isTaskStartedState);
+  const [isTaskStarted, setIsTaskStarted] = useRecoilState(isTaskStartedState);
   const [isTaskDone,] = useRecoilState(isTaskDoneState);
   const [isStopped,] = useRecoilState(isTimerStoppedState);
 
@@ -75,13 +79,15 @@ export function Timer() {
         setSeconds(workInterval);
         setPomodoros(1);
         setIsWork(false);
-        Object.keys(totalPomodoros).includes(period)
-          ? setTotalPomodoros({ ...totalPomodoros, [period]: totalPomodoros[period] + 1 })
-          : setTotalPomodoros({ ...totalPomodoros, [period]: 1 })
+        setIsTaskStarted(false);
+        setWorkSessionsCount(0);
+        const doneTask = tasks.filter(task => task.id === currentTask.id)[0];
+        setCompletedTasks([...completedTasks, doneTask]);
+        setTasks(prev => prev.filter(task => task.id !== currentTask.id));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seconds, isWork, isTaskDone, workSessionsCount, totalPomodoros, workInterval, shortBreakInterval, longBreakInterval])
+  }, [seconds, isWork, isTaskDone, workSessionsCount, totalPomodoros, workInterval, shortBreakInterval, longBreakInterval, completedTasks, currentTask, tasks])
 
   // Считаем общее время
   useEffect(() => {

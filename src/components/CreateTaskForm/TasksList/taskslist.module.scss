@@ -1,0 +1,57 @@
+@import '../../../variables';
+
+.task-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.task-enter-active {
+  opacity: 1;
+  transform: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.task-exit {
+  opacity: 1;
+  transform: none;
+}
+
+.task-exit-active {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+
+.tasksList {
+  grid-column: 1 / 6;
+  margin-bottom: 30px;
+}
+
+.timeCounter {
+  margin-top: 20px;
+  grid-column: 1 / 6;
+  color: $grey99;
+}
+
+@media (max-width: $bpL) {
+
+  .tasksList {
+    grid-column: 7 / 13;
+  }
+
+  .timeCounter {
+    grid-column: 7 / 13;
+  }
+}
+
+@media (max-width: $bpM) {
+
+  .tasksList {
+    grid-column: 1 / 13;
+  }
+
+  .timeCounter {
+    grid-column: 1 / 13;
+  }
+}

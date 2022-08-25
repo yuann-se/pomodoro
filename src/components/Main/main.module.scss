@@ -8,7 +8,7 @@
 
 .container {
   @include container;
-  padding: 100px 80px 110px;
+  padding: 100px 80px 130px;
 }
 
 @media (max-width: $bpL) {
@@ -19,12 +19,12 @@
 
 @media (max-width: $bpS) {
   .container {
-    padding: 50px 50px 110px;
+    padding: 50px 50px 130px;
   }
 }
 
 @media (max-width: $bpXS) {
   .container {
-    padding: 30px 20px 110px;
+    padding: 30px 20px 130px;
   }
 }

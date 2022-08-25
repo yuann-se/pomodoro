@@ -13,3 +13,10 @@
 .break {
   color: $green;
 }
+
+@media (max-width: $bpXS) {
+
+  .counter {
+    font-size: 120px;
+  }
+}

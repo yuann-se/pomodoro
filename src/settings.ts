@@ -1,3 +1,3 @@
-export const workInterval: number = 60;
-export const shortBreakInterval: number = 10;
-export const longBreakInterval: number = 15;
+export const workInterval: number = 1500;
+export const shortBreakInterval: number = 300;
+export const longBreakInterval: number = 900;

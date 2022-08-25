@@ -1,28 +1,6 @@
 @import '../../variables';
 @import '../../mixins';
 
-.task-enter {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-.task-enter-active {
-  opacity: 1;
-  transform: none;
-  transition: opacity .2s ease, transform .2s ease;
-}
-
-.task-exit {
-  opacity: 1;
-  transform: none;
-}
-
-.task-exit-active {
-  opacity: 0;
-  transform: translateX(30px);
-  transition: opacity .2s ease, transform .2s ease;
-}
-
 .form {
   display: grid;
   grid-column: 1 / 6;
@@ -48,16 +26,6 @@ input {
 .addBtn {
   @include basicBtn;
   max-width: 200px;
-}
-
-.tasksList {
-  grid-column: 1 / 6;
-}
-
-.timeCounter {
-  margin-top: 35px;
-  grid-column: 1 / 6;
-  color: $grey99;
 }
 
 @media (max-width: $bpL) {
