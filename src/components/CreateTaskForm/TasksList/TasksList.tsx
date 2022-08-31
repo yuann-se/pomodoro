@@ -1,6 +1,7 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useRecoilValue } from 'recoil';
 import { appIntervals, IIntervals, ITask } from '../../../store';
+import { secondsToTime } from '../../../utils';
 import { TaskItem } from '../TaskItem';
 import styles from './taskslist.module.scss';
 
@@ -34,15 +35,7 @@ export function TasksList({ list, itemsType = 'default', listType = 'tasks' }: I
     list.forEach(task => sec += task.poms);
     sec *= workInterval;
 
-    const hours = Math.floor(sec / 60 / 60);
-    const minutes = Math.floor(sec / 60 - hours * 60);
-    const seconds = Math.floor(sec - hours * 60 * 60 - minutes * 60);
-
-    const hoursStr = hours ? `${hours} ч` : '';
-    const minStr = minutes ? `${minutes} мин` : '';
-    const secStr = seconds ? `${seconds} сек` : '';
-
-    return `${hoursStr} ${minStr} ${secStr}`
+    return secondsToTime(sec);
   }
 
   return (

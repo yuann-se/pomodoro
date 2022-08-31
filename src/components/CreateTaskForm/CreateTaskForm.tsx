@@ -3,8 +3,7 @@ import styles from './createtaskform.module.scss';
 import { useRecoilState } from 'recoil';
 import { completedTasksState, ITask, tasksState } from '../../store';
 import { TasksList } from './TasksList';
-
-export const generateRandomString = () => Math.random().toString(36).substring(2, 15);
+import { generateRandomString } from '../../utils';
 
 export function CreateTaskForm() {
 

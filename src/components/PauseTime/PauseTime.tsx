@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useRecoilValue } from 'recoil';
 import { PauseTimeIcon } from '../../icons';
 import { ICount, timeOnPauseState } from '../../store';
+import { secondsToTime } from '../../utils';
 import styles from './pausetime.module.scss';
 
 interface IPauseTimeProps {
@@ -13,11 +14,8 @@ export function PauseTime({ period }: IPauseTimeProps) {
   const pauseTime = useRecoilValue<ICount>(timeOnPauseState)[period] || 0;
 
   const displayTime = () => {
-    if (pauseTime < 60) return '0м';
-    const hours = Math.floor(pauseTime / 60 / 60);
-    const minutes = Math.floor(pauseTime / 60);
-    if (hours < 1) return `${minutes}м`
-    return `${hours}ч ${minutes}м`
+    if (pauseTime < 60) return '0 мин';
+    return secondsToTime(pauseTime);
   }
 
   const classes = classNames(styles.wrapper, {

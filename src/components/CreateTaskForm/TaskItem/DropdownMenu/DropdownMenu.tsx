@@ -58,14 +58,16 @@ export function DropdownMenu({ poms, taskId, onEditClick }: IDropdownMenuProps) 
   }
 
   const onConfirmClick = () => {
+    if (tasks.length && taskId === tasks[0].id && isTaskStarted) {
+      setIsTaskStarted(false);
+      setWorkSessionsCount(0);
+      setIsWork(false);
+      setSeconds(workInterval);
+      setPomodoros(1);
+      setIsRunning(false);
+      setIsTimerStarted(false);
+    }
     setTasks(tasks.filter(task => task.id !== taskId));
-    setIsTaskStarted(false);
-    setWorkSessionsCount(0);
-    setIsWork(false);
-    setSeconds(workInterval);
-    setPomodoros(1);
-    setIsRunning(false);
-    setIsTimerStarted(false);
   }
 
   return (

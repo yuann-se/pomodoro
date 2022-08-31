@@ -143,3 +143,9 @@ export const selectedDayState = atom<number>({
   default: getToday(),
   effects_UNSTABLE: [persistAtom],
 });
+
+export const isMainPageState = atom<boolean>({
+  key: 'isMainPage',
+  default: true,
+  effects_UNSTABLE: [persistAtom],
+});

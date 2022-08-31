@@ -7,7 +7,7 @@ import { Statistics } from './components/Statistics';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Route, Switch, useLocation } from 'react-router';
 import { SetterOrUpdater, useRecoilState, useRecoilValue } from 'recoil';
-import { appIntervals, ICount, stopsCountState, timeOnPauseState, totalPomodorosState, totalTimeState } from './store';
+import { appIntervals, ICount, isMainPageState, stopsCountState, timeOnPauseState, totalPomodorosState, totalTimeState } from './store';
 import { useEffect } from 'react';
 
 const transitionClassesMain = {
@@ -43,6 +43,8 @@ function App() {
 
   const location = useLocation();
   const workInterval = useRecoilValue(appIntervals).work;
+
+  const [isMainPage,] = useRecoilState<boolean>(isMainPageState);
 
   const [totalTime, setTotalTime] = useRecoilState<ICount>(totalTimeState);
   const [totalPauseTime, setTotalPauseTime] = useRecoilState<ICount>(timeOnPauseState);
@@ -94,23 +96,16 @@ function App() {
       }
       localStorage.setItem('mockDataLoaded', 'true');
     }
-  }, [workInterval])
+  }, [workInterval]);
 
   return (
     <>
       <Header />
 
       <TransitionGroup>
-        <CSSTransition key={location.pathname} timeout={500} classNames={transitionClassesMain}>
+        <CSSTransition key={location.pathname} timeout={500} classNames={isMainPage ? transitionClassesMain : transitionClassesStatistics}>
           <Switch location={location}>
             <Route exact path='/' children={<Main />} />
-          </Switch>
-        </CSSTransition>
-      </TransitionGroup>
-
-      <TransitionGroup>
-        <CSSTransition key={location.pathname} timeout={500} classNames={transitionClassesStatistics}>
-          <Switch location={location}>
             <Route exact path='/statistics' children={<Statistics />} />
           </Switch>
         </CSSTransition>
