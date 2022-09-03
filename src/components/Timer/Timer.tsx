@@ -7,8 +7,9 @@ import workTimeSound from '../../sounds/workTime.mp3';
 import breakTimeSound from '../../sounds/breakTime.mp3';
 import successSound from '../../sounds/success.mp3'
 import { TimeoutMsg } from './TimeoutMsg';
-import { appIntervals, completedTasksState, currentPomodorosState, currentSeconds, currentTaskState, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, ITask, tasksState, timeOnPauseState, totalPomodorosState, totalTimeState, workSessionsCountState } from '../../store';
+import { appIntervals, completedTasksState, currentPomodorosState, currentSeconds, currentTaskState, IIntervals, isModalOpenState, isTaskDoneState, isTaskStartedState, isTimerRunningState, isTimerStartedState, isTimerStoppedState, isWorkState, ITask, pauseTimeRefPoint, tasksState, timeOnPauseState, totalPomodorosState, totalTimeRefPoint, totalTimeState, workSessionsCountState } from '../../store';
 import { ClockFace } from './ClockFace';
+
 
 const workTimeAudio = new Audio(workTimeSound); workTimeAudio.volume = .1;
 const breakTimeAudio = new Audio(breakTimeSound); breakTimeAudio.volume = .1;
@@ -43,30 +44,28 @@ export function Timer() {
   const [isRunning, setIsRunning] = useRecoilState(isTimerRunningState);
 
   const [totalTime, setTotalTime] = useRecoilState(totalTimeState);
+  const [totalTimeRef, setTotalTimeRef] = useRecoilState(totalTimeRefPoint);
   const [timeOnPause, setTimeOnPause] = useRecoilState(timeOnPauseState);
+  const [pauseTimeRef, setPauseTimeRef] = useRecoilState(pauseTimeRefPoint);
+
   const [isTaskStarted, setIsTaskStarted] = useRecoilState(isTaskStartedState);
   const [isTaskDone,] = useRecoilState(isTaskDoneState);
   const [isStopped,] = useRecoilState(isTimerStoppedState);
 
   const [isWork, setIsWork] = useRecoilState(isWorkState);
-  const [workSessionsCount, setWorkSessionsCount] = useRecoilState(workSessionsCountState);
+  const [workSessionsCount,] = useRecoilState(workSessionsCountState);
   const [isModalOpen, setIsModalOpen] = useRecoilState(isModalOpenState);
 
+  // Действия по истечении таймера
   useEffect(() => {
-    if (seconds === 0) {
+    if (seconds < 1) {
       isTaskDone ? successAudio.play() : isWork ? breakTimeAudio.play() : workTimeAudio.play();
       setIsRunning(false);
       setIsTimerStarted(false);
       setIsModalOpen(true);
       if (!isTaskDone) {
         if (isWork) {
-          if (workSessionsCount > 2) {
-            setSeconds(longBreakInterval);
-            setWorkSessionsCount(0);
-          } else {
-            setSeconds(shortBreakInterval);
-            setWorkSessionsCount((prev) => prev + 1)
-          }
+          workSessionsCount > 2 ? setSeconds(longBreakInterval) : setSeconds(shortBreakInterval);
 
           Object.keys(totalPomodoros).includes(period)
             ? setTotalPomodoros({ ...totalPomodoros, [period]: totalPomodoros[period] + 1 })
@@ -80,7 +79,6 @@ export function Timer() {
         setPomodoros(1);
         setIsWork(false);
         setIsTaskStarted(false);
-        setWorkSessionsCount(0);
         const doneTask = tasks.filter(task => task.id === currentTask.id)[0];
         setCompletedTasks([...completedTasks, doneTask]);
         setTasks(prev => prev.filter(task => task.id !== currentTask.id));
@@ -94,24 +92,26 @@ export function Timer() {
     if (isTaskStarted && !isTaskDone && !isStopped && isTimerStarted) {
       setTimeout(() => {
         Object.keys(totalTime).includes(period)
-          ? setTotalTime({ ...totalTime, [period]: totalTime[period] + 1 })
-          : setTotalTime({ ...totalTime, [period]: 0 });
+          ? setTotalTime({ ...totalTime, [period]: totalTime[period] + Math.round((new Date().getTime() - totalTimeRef) / 1000) })
+          : setTotalTime({ ...totalTime, [period]: 1 });
+        setTotalTimeRef(new Date().getTime());
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTaskStarted, isTaskDone, isStopped, totalTime, isTimerStarted]);
+  }, [isTaskStarted, isTaskDone, isStopped, totalTime, isTimerStarted, totalTimeRef]);
 
   // Считаем время на паузе
   useEffect(() => {
     if (!isRunning && !isStopped && isTaskStarted && isTimerStarted) {
       setTimeout(() => {
         Object.keys(timeOnPause).includes(period)
-          ? setTimeOnPause({ ...timeOnPause, [period]: timeOnPause[period] + 1 })
-          : setTimeOnPause({ ...timeOnPause, [period]: 0 })
+          ? setTimeOnPause({ ...timeOnPause, [period]: timeOnPause[period] + Math.round((new Date().getTime() - pauseTimeRef) / 1000) })
+          : setTimeOnPause({ ...timeOnPause, [period]: 1 });
+        setPauseTimeRef(new Date().getTime());
       }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeOnPause, isRunning, isStopped, isTaskStarted, isTimerStarted])
+  }, [timeOnPause, isRunning, isStopped, isTaskStarted, isTimerStarted, pauseTimeRef])
 
   const classes = classnames(styles.wrapper, {
     [styles.workTheme]: isWork && isTimerStarted,
