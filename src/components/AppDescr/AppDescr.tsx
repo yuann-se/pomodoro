@@ -16,7 +16,7 @@ export function AppDescr() {
         <li><span className={styles.dot} />
           <span className={styles.text}>Сделайте короткий перерыв (5&nbsp;минут)</span></li>
         <li><span className={styles.dot} />
-          <span className={styles.text}>Продолжайте работать &laquo;помидор&raquo; за&nbsp;&laquo;помидором&raquo;, пока задача не&nbsp;будут выполнена. Каждые 4&nbsp;&laquo;помидора&raquo; делайте длинный перерыв (15&nbsp;минут).</span></li>
+          <span className={styles.text}>Продолжайте работать &laquo;помидор&raquo; за&nbsp;&laquo;помидором&raquo;, пока задача не&nbsp;будут выполнена. Каждые 4&nbsp;&laquo;помидора&raquo; делайте длинный перерыв (15&nbsp;минут)</span></li>
       </ul>
     </div>
   );
