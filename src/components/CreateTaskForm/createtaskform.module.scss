@@ -57,3 +57,10 @@ input {
     grid-column: 1 / 13;
   }
 }
+
+@media (max-width: $bpXS) {
+  .form {
+    grid-column: 1 / 13;
+    height: 150px;
+  }
+}
